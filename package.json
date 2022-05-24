@@ -1,0 +1,27 @@
+{
+  "name": "glsl-stringify-loader",
+  "version": "1.0.0",
+  "description": "a wepback loader for glsl",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhangwinwin/glsl-stringify-loader.git"
+  },
+  "keywords": [
+    "glsl",
+    "webpack",
+    "loader"
+  ],
+  "author": "zhangwinwin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zhangwinwin/glsl-stringify-loader/issues"
+  },
+  "homepage": "https://github.com/zhangwinwin/glsl-stringify-loader#readme",
+  "dependencies": {
+    "webpack": "^5.72.1"
+  }
+}
