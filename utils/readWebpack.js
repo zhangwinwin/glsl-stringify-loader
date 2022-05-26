@@ -5,11 +5,11 @@ const wepback = require('webpack');
 
 const CONFIGROOT = path.join(__dirname, '..', 'configs')
 
-module.exports = function readWepback (config, entry) {
+module.exports = function readWepback (configs, entry) {
     return new Promise((resolve, reject) => {
-        const config = require(path.resolve(CONFIGROOT, config))
+        const config = require(path.resolve(CONFIGROOT, configs))
         config.entry = path.resolve(CONFIGROOT, entry)
-        if (config.output) config.output = {}
+        if (!config.output) config.output = {}
         Object.assign(config.output, {
             path: '/',
             filename: 'bundle.js',
