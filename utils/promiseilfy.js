@@ -1,4 +1,4 @@
-module.exports = function (callback) {
+module.exports = function (context) {
     return function promisified () {
         const args = [].slice.call(arguments);
         return new Promise((resolve, rejcect) => {
@@ -8,6 +8,6 @@ module.exports = function (callback) {
                 else resolve([].slice.call(arguments, 1))
             })
         })
-        callback.apply(null, args);
+        context.apply(null, args);
     }
 }
