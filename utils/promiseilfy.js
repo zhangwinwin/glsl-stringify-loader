@@ -7,7 +7,7 @@ module.exports = function (context) {
                 if (arguments.length <= 2) resolve(result)
                 else resolve([].slice.call(arguments, 1))
             })
+            context.apply(null, args);
         })
-        context.apply(null, args);
     }
 }
