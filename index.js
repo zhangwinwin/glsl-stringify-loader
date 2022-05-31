@@ -1,59 +1,59 @@
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
+const { rejects } = require('assert');
+const fs = require('fs');
+const path = require('path');
+const promiseilfy = require('./utils/promiseilfy');
+const readFile = promiseilfy(fs.readFile)
+const reg = /#require "([.\/\w_-]+)"/gi;
 
-
-function parse(loader, source, context, cb) {
-    var imports = [];
-    var importPattern = /#include "([.\/\w_-]+)"/gi;
-    var match = importPattern.exec(source);
+function match (source) {
+    const requires = [];
+    let match = reg.exec(source);
 
     while (match != null) {
-        imports.push({
-            key: match[1],
+        requires.push({
+            path: match[1],
             target: match[0],
             content: ''
         });
-        match = importPattern.exec(source);
+        match = reg.exec(source);
     }
-
-    processImports(loader, source, context, imports, cb);
+    return requires;
 }
 
-function processImports(loader, source, context, imports, cb) {
-    if (imports.length === 0) {
-        return cb(null, source);
-    }
+function parse(loader, source, context, cb) {
+    handleRequire(loader, source, context, match(source), cb);
+}
 
-    var imp = imports.pop();
+function handleRequire(loader, source, context, requires, cb) {
+    if (requires.length === 0) return cb(null, source);
 
-    loader.resolve(context, './' + imp.key, function(err, resolved) {
-        if (err) {
-            return cb(err);
-        }
-
+    const req = requires.pop();
+    
+    const res = promiseilfy(loader.resolve)
+    res(context, './' + req.path).then(resolved => {
         loader.addDependency(resolved);
-        fs.readFile(resolved, 'utf-8', function(err, src) {
-            if (err) {
-                return cb(err);
-            }
-
+        readFile(resolved, 'utf-8').then(src => {
             parse(loader, src, path.dirname(resolved), function(err, bld) {
                 if (err) {
                     return cb(err);
                 }
 
-                source = source.replace(imp.target, bld);
-                processImports(loader, source, context, imports, cb);
+                source = source.replace(req.target, bld);
+                handleRequire(loader, source, context, requires, cb);
             });
-        });
-    });
+        }).catch(err => {
+            return cb(err);
+        })
+    }).catch(err => {
+        return cb(err);
+    })
 }
 
 module.exports = function(source) {
     this.cacheable();
-    var cb = this.async();
+    const cb = this.async();
     parse(this, source, this.context, function(err, bld) {
         if (err) {
             return cb(err);
