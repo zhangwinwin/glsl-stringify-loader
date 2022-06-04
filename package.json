@@ -1,5 +1,5 @@
 {
-  "name": "glsl-stringify-loader",
+  "name": "@doublewin/glsl-stringify-loader",
   "version": "1.0.0",
   "description": "a wepback loader for glsl",
   "main": "index.js",
@@ -18,6 +18,10 @@
   ],
   "author": "zhangwinwin",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "bugs": {
     "url": "https://github.com/zhangwinwin/glsl-stringify-loader/issues"
   },
