@@ -1,6 +1,5 @@
 'use strict';
 
-const { rejects } = require('assert');
 const fs = require('fs');
 const path = require('path');
 const promiseilfy = require('./utils/promiseilfy');
