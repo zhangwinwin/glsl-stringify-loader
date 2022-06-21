@@ -1,11 +1,11 @@
 const path = require('path')
 const MemoryFileSystem = require('memory-fs');
 const requireFromString = require('require-from-string')
-const wepback = require('webpack');
+const webpack = require('webpack');
 
 const CONFIGROOT = path.join(__dirname, '..', 'configs')
 
-module.exports = function readWepback (configs, entry) {
+module.exports = function readwebpack (configs, entry) {
     return new Promise((resolve, reject) => {
         const config = require(path.resolve(CONFIGROOT, configs))
         config.entry = path.resolve(CONFIGROOT, entry)
@@ -16,7 +16,7 @@ module.exports = function readWepback (configs, entry) {
             libraryTarget: 'umd'
         })
 
-        const compiler = wepback(config)
+        const compiler = webpack(config)
         const memfs = new MemoryFileSystem()
         compiler.outputFileSystem = memfs
         compiler.run((err, stats) => {
